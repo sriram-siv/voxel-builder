@@ -1,4 +1,4 @@
-import * as THREE from '../node_modules/three/build/three.module.js'
+import * as THREE from './three.module.js'
 
 const cube = (dimensions, initMaterials, position) => {
   const geometry = new THREE.BoxGeometry(...dimensions)
