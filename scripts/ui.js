@@ -1,3 +1,5 @@
+import * as THREE from '../node_modules/three/build/three.module.js'
+
 const keyRegister = () => {
   const keys = {}
   window.addEventListener('keydown', e => keys[e.key] = true)
@@ -16,14 +18,9 @@ const dragMouse = onDrag => {
   window.addEventListener('mouseup', cleanUp)
 }
 
-const objectInRay = (raycaster, camera, scene, mousePos) => {
-  raycaster.setFromCamera(mousePos, camera)
-  const intersects = raycaster.intersectObjects(scene.children)
-  return intersects[0] ?? false
-}
+const getMousePos = event => new THREE.Vector2(
+  (event.clientX / window.innerWidth) * 2 - 1,
+  -(event.clientY / window.innerHeight) * 2 + 1
+)
 
-const getCubeFace = index => Math.floor(index / 2)
-
-const getDimensions = object => object.geometry.parameters
-
-export default { keyRegister, dragMouse, objectInRay, getCubeFace, getDimensions }
+export default { keyRegister, dragMouse, getMousePos }

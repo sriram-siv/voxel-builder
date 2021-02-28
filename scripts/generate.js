@@ -11,18 +11,11 @@ const cube = (dimensions, initMaterials, position) => {
   const cube = new THREE.Mesh(geometry, material)
 
   Object.keys(position).forEach(axis => cube.position[axis] = position[axis])
-  cube.activeFace = null
-  cube.wasActiveFace = new Set()
+
   cube.initMaterials = [...initMaterials]
   
   return cube
 }
-
-// const randomColors = () => Array.from({ length: 6 }).map(() => {
-//   const colors = ['plum', 'palevioletred', 'papayawhip', 'lightgreen', 'lightblue', 'slateblue']
-//   const random = Math.floor(Math.random() * 6)
-//   return colors[random]
-// })
 
 const defaultColors = () => ['plum', 'palevioletred', 'papayawhip', 'lightgreen', 'lightblue', 'slateblue']
 
