@@ -4,18 +4,34 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script type="module" src="scripts/app.js"></script>
+
+  <script type="module" src="dist/main.js"></script>
+  <link rel="stylesheet" href="src/styles/styles.css">
+
   <title>Document</title>
-  <style>
-    body { margin: 0; overflow: hidden; }
-    .controls { position: absolute; left: 15px; }
-    .controls p { color: white; font-family: 'Courier New', Courier, monospace; }
-    .controls p::selection { background-color: transparent; }
-  </style>
 </head>
 <body>
+
   <div class="controls">
     <p>duplicate</p>
   </div>
+
+  <div class="inspector">
+
+    <div class="colors">
+      <p>colors: </p>
+      <div>r</div>
+      <div>l</div>
+      <div>t</div>
+      <div>b</div>
+      <div>f</div>
+      <div>b</div>
+    </div>
+
+  </div>
+
+  <!-- Three.js Scene Container -->
+  <div class="world"></div>
+
 </body>
 </html>

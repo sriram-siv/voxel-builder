@@ -1,0 +1,42 @@
+body {
+  margin: 0;
+  overflow: hidden;
+  font-family: "Courier New", Courier, monospace;
+  pointer-events: none;
+}
+
+.world {
+  width: 100vw;
+  height: 100vh;
+}
+
+.controls {
+  position: absolute;
+  left: 15px;
+}
+.controls p {
+  color: white;
+}
+
+.inspector {
+  position: absolute;
+  right: 15px;
+}
+.inspector .colors {
+  display: flex;
+  align-items: center;
+}
+.inspector .colors p {
+  color: white;
+}
+.inspector .colors div {
+  width: 25px;
+  height: 25px;
+  margin: 2px;
+  line-height: 25px;
+  text-align: center;
+  color: white;
+  text-shadow: 1px 1px black;
+}
+
+/*# sourceMappingURL=styles.css.map */
