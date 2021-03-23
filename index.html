@@ -20,18 +20,34 @@
 
     <div class="colors">
       <p>colors: </p>
-      <div>r</div>
-      <div>l</div>
-      <div>t</div>
-      <div>b</div>
-      <div>f</div>
-      <div>b</div>
+      <button>r</button>
+      <button>l</button>
+      <button>t</button>
+      <button>b</button>
+      <button>f</button>
+      <button>b</button>
     </div>
 
   </div>
 
+  <div class="tools">
+    <div class="pallette">
+      <label for="picker">hex</label>
+      <input type="text" id="picker">
+    </div>
+  </div>
+
   <!-- Three.js Scene Container -->
   <div class="world"></div>
+
+  <video id="video" playsinline style="
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    visibility: hidden;
+    width: auto;
+    height: auto;
+    ">
+  </video>
 
 </body>
 </html>

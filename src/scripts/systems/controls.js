@@ -3,7 +3,7 @@ import { Vector3 } from 'three'
 
 import ui from '../ui/dom.js'
 
-function createControls(scene, camera, options) {
+function createControls(scene, camera, options, container) {
 
   const controls = { ...options, timer: {} }
 
@@ -28,7 +28,7 @@ function createControls(scene, camera, options) {
     })
   })
 
-  window.addEventListener('click', controls.onClick)
+  container.addEventListener('click', controls.onClick)
 
   window.addEventListener('keydown', event => trackCamera(event.key, camera, controls))
 

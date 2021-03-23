@@ -6,7 +6,6 @@ import { createControls } from './controls.js'
 const setup = (container, controlConfig) => {
 
   const scene = new Scene()
-  // scene.background = new Color('lightblue')
 
   const voxels = new Group()
   voxels.name = 'voxels'
@@ -31,7 +30,7 @@ const setup = (container, controlConfig) => {
 
   const camera = createCamera(container, renderer, null)
 
-  const controls = createControls(scene, camera, controlConfig)
+  const controls = createControls(scene, camera, controlConfig, container)
 
 
   return { scene, camera, renderer, raycaster, controls }

@@ -2,12 +2,24 @@ body {
   margin: 0;
   overflow: hidden;
   font-family: "Courier New", Courier, monospace;
-  pointer-events: none;
+}
+body::selection {
+  background-color: transparent;
+}
+
+*:focus {
+  outline: none;
+}
+
+input {
+  border: 1px solid #888a;
+  border-radius: 1px;
 }
 
 .world {
   width: 100vw;
   height: 100vh;
+  pointer-events: all;
 }
 
 .controls {
@@ -20,7 +32,7 @@ body {
 
 .inspector {
   position: absolute;
-  right: 15px;
+  right: 13px;
 }
 .inspector .colors {
   display: flex;
@@ -29,14 +41,50 @@ body {
 .inspector .colors p {
   color: white;
 }
-.inspector .colors div {
+.inspector .colors button {
+  position: relative;
   width: 25px;
   height: 25px;
   margin: 2px;
-  line-height: 25px;
+  border: none;
+  line-height: 21px;
   text-align: center;
   color: white;
   text-shadow: 1px 1px black;
+}
+.inspector .colors button.isActive {
+  top: 1px;
+  height: 27px;
+  padding-bottom: 2px;
+}
+
+.tools .pallette {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  position: absolute;
+  top: 40px;
+  right: 15px;
+  width: 165px;
+  height: 35px;
+  padding-right: 5px;
+  background-color: plum;
+  color: white;
+  text-shadow: 1px 1px black;
+}
+.tools .pallette label {
+  width: 5rem;
+  text-align: center;
+  line-height: 35px;
+}
+.tools .pallette input {
+  width: calc(100% - 5rem - 8px);
+  height: 20px;
+  font-family: "Courier New", Courier, monospace;
+  color: white;
+  background-color: #333;
+  text-align: center;
+  padding-top: 3px;
 }
 
 /*# sourceMappingURL=styles.css.map */

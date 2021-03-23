@@ -45,14 +45,17 @@ const createWireframe = (object) => {
 
 const createGround = () => {
 
-  return matrix(32, 32).map(([i, j]) => (
+  return matrix(32, 32).map(([i, j]) => {
 
-    createCube({
+    const cube = createCube({
       materials: 'ground',
       position: { x: i - 16, y: -1, z: j - 16 }
     })
 
-  ))
+    cube.isGround = true
+
+    return cube
+  })
 }
 
 export { createCube, createWireframe, createGround }

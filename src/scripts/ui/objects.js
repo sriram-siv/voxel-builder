@@ -15,6 +15,12 @@ export const getFaceParams = face => {
   return { param, axis, shift }
 }
 
+export const getMaterialRGB = material => ({
+  r: material.color.r * 255,
+  g: material.color.g * 255,
+  b: material.color.b * 255
+})
+
 export const onMouseMove = (state, mousePos) => {
 
   const { activeObjects } = state

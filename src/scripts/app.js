@@ -2,19 +2,54 @@ import * as THREE from 'three'
 
 import { setup } from './systems/config.js'
 import ui from './ui/dom.js'
-import { onMouseMove } from './ui/objects.js'
+import { getFaceParams, onMouseMove } from './ui/objects.js'
 import { createGround, createWireframe } from './components/generate.js'
 import { slice, subdivide, stretch, duplicate } from './components/modify.js'
 
+import { initFaceTracking, getFacePosition } from './blazeface.js'
+
 (function init() {
+
+  let currentPosition = {}
+
+  function trackFace() {
+
+    getFacePosition().then(res => {
+      if (res) {
+        currentPosition = res
+      }
+    })
+
+    const x = (500 - currentPosition.x) / 25
+    const y = (500 - currentPosition.y) / 25
+
+    state.camera.position.x = x - 10
+    state.camera.position.y = y - 10
+    state.camera.lookAt(new THREE.Vector3(0, 0, 0))
+
+    state.rerender = true
+
+    requestAnimationFrame(trackFace)
+  }
+  initFaceTracking().then(() => trackFace())
+
 
   const container = document.querySelector('.world')
   const controlDisplay = document.querySelector('.controls p')
+
   const inspector = {
+    container: document.querySelector('.inspector'),
     id: document.querySelector('.inspector-id'),
-    colors: document.querySelectorAll('.inspector .colors div')
+    colors: document.querySelectorAll('.inspector .colors button')
   }
 
+  const toolbar = {
+    container: document.querySelector('.tools'),
+    pallette: {
+      container: document.querySelector('.pallette'),
+      input: document.querySelector('.pallette input')
+    }
+  }
 
   const state = {
 
@@ -28,7 +63,11 @@ import { slice, subdivide, stretch, duplicate } from './components/modify.js'
 
     action: 'select',
     cancelAction: false,
-    rerender: false
+    rerender: false,
+
+    inspector: {
+      activeColor: 0
+    }
   }
 
   const setState = changes => {
@@ -46,24 +85,56 @@ import { slice, subdivide, stretch, duplicate } from './components/modify.js'
     state.rerender = true
   }
 
+  inspector.colors.forEach((button, i) => button.addEventListener('click', () => {
+    setState({
+      inspector: { ...state.inspector, activeColor: i }
+    })
+  }))
+
+  // bindInput(toolbar.pallette.input, value => {
+  //   // Check valid hex
+  //   if (!/[\da-f]{6}/.test(value)) return
+
+  //   // Set color on object
+  //   const selected = state.scene.getObjectByProperty('uuid', state.selectedObjects[0])
+  //   selected.material[state.inspector.activeColor].color.setHex(`0x${value}`)
+
+  //   // Call new render / draw
+  //   setState({ rerender: true })
+  // })
+
+  toolbar.pallette.input.addEventListener('keydown', e => e.stopPropagation())
+  toolbar.pallette.input.addEventListener('input', event => {
+
+    const value = event.target.value
+
+    // Check valid hex
+    if (!/[\da-f]{6}/.test(value)) return
+
+    // Set color on object
+    const selected = state.scene.getObjectByProperty('uuid', state.selectedObjects[0])
+    selected.material[state.inspector.activeColor].color.setHex(`0x${value}`)
+
+    // Call new render / draw
+    setState({ rerender: true })
+  })
+
   const draw = () => {
     controlDisplay.textContent = state.action
 
     const selected = state.scene.getObjectByProperty('uuid', state.selectedObjects[0])
 
-    if (selected) {
-      selected.material.forEach((material, i) => {
+    ui.toggleInspector(inspector, toolbar, selected)
 
-        const r = material.color.r * 255
-        const g = material.color.g * 255
-        const b = material.color.b * 255
+    if (!selected) return
 
-        inspector.colors[i].style.backgroundColor = `rgb(${r}, ${g}, ${b})`
-      })
-    } else {
-      inspector.colors.forEach(cell => cell.style.backgroundColor = 'black')
-    }
+    // Render Inspector
+
+    ui.setPalletteColors(inspector, toolbar, selected, state.inspector.activeColor)
+
   }
+
+  
 
   const updateScene = (groupName, action, ...objects) => {
     const group = state.scene.getObjectByName(groupName)
@@ -112,8 +183,8 @@ import { slice, subdivide, stretch, duplicate } from './components/modify.js'
       renderer.render(scene, camera)
       state.rerender = false
       console.log(
-        '%c rendering 🤖 ',
-        'color: #333; background: plum; font-weight: bold; line-height: 1.2rem'
+        '%c r e n d e r i n g 🤖 ',
+        'color: #333; background: plum; font-weight: bold; line-height: 1.2rem;'
       )
     }
     requestAnimationFrame(animate)
@@ -145,7 +216,7 @@ import { slice, subdivide, stretch, duplicate } from './components/modify.js'
   function handleMouseClick(event) {
     const { scene, activeObjects, action, cancelAction } = state
 
-    if (!state.keys.Shift) {
+    if (!state.keys.Shift && !state.cancelAction) {
       updateScene('wireframes', 'clear')
       setState({ selectedObjects: [] })
     }
@@ -156,6 +227,9 @@ import { slice, subdivide, stretch, duplicate } from './components/modify.js'
     }
 
     const clickedObject = scene.getObjectByProperty('uuid', activeObjects.current.id)
+
+    if (clickedObject.isGround && !['select', 'duplicate'].includes(action))
+      return
 
     switch (action) {
       case 'select':
@@ -186,7 +260,7 @@ import { slice, subdivide, stretch, duplicate } from './components/modify.js'
         updateScene('voxels', 'remove', clickedObject)
         break
       case 'duplicate':
-        updateScene('voxels', 'add', duplicate(clickedObject, activeObjects.current.face))
+        updateScene('voxels', 'add', duplicate(clickedObject, activeObjects.current))
         break
     }
 

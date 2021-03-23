@@ -2,13 +2,24 @@ body {
   margin: 0; 
   overflow: hidden; 
   font-family: 'Courier New', Courier, monospace;
+   &::selection { background-color: transparent; }
+}
 
-  pointer-events: none;
+* { 
+  &:focus {
+    outline: none;
+  }
+}
+
+input {
+  border: 1px solid #888a;
+  border-radius: 1px;
 }
 
 .world { 
   width: 100vw; 
-  height: 100vh 
+  height: 100vh;
+  pointer-events: all;
 }
 
 .controls { 
@@ -22,7 +33,7 @@ body {
 
 .inspector {
   position: absolute;
-  right: 15px;
+  right: 13px;
 
   .colors {
     display: flex;
@@ -32,15 +43,57 @@ body {
       color: white;
     }
 
-    div {
+    button {
+      position: relative;
       width: 25px;
       height: 25px;
       margin: 2px;
+      border: none;
 
-      line-height: 25px;
+      line-height: 21px;
       text-align: center;
       color: white;
       text-shadow: 1px 1px black;
+
+      &.isActive {
+        top: 1px;
+        height: 27px;
+        padding-bottom: 2px;
+      }
+    }
+  }
+}
+
+.tools {
+
+  .pallette {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: absolute;
+    top: 40px;
+    right: 15px;
+    width: 165px;
+    height: 35px;
+    padding-right: 5px;
+    background-color: plum;
+    color: white;
+    text-shadow: 1px 1px black;
+
+    label {
+      width: 5rem;
+      text-align: center;
+      line-height: 35px;
+    }
+
+    input {
+      width: calc(100% - 5rem - 8px);
+      height: 20px;
+      font-family: 'Courier New', Courier, monospace;
+      color: white;
+      background-color: #333;
+      text-align: center;
+      padding-top: 3px;
     }
   }
 }

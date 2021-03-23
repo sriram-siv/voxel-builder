@@ -1,6 +1,7 @@
 import { Vector2 } from 'three'
 
 import { mod } from '../helpers.js'
+import { getMaterialRGB } from './objects.js'
 
 const keyRegister = () => {
   const keys = {}
@@ -32,4 +33,41 @@ const cycleAction = (step, current) => {
   return { action: actions[next] }
 }
 
-export default { keyRegister, dragMouse, getMousePos, cycleAction }
+const setPalletteColors = (inspector, toolbar, selected, activeBtn) => {
+
+  selected.material
+    .map(getMaterialRGB)
+    .forEach(({ r, g, b }, i) => {
+      // Set BG color
+      inspector.colors[i].style.backgroundColor = `rgb(${r}, ${g}, ${b})`
+
+      if (i === activeBtn) {
+        // Join button to pallette
+        inspector.colors[i].classList.add('isActive')
+        // Set pallette BG and input value
+        toolbar.pallette.container.style.backgroundColor = `rgb(${r}, ${g}, ${b})`
+        const hexValue = inspector.colors[i].style.backgroundColor.match(/\d+/g)
+          ?.map(val => val === '0' ? '00' : Number(val).toString(16))
+          .join('')
+        
+        toolbar.pallette.input.value = hexValue
+
+      } else {
+        inspector.colors[i].classList.remove('isActive')
+      }
+    })
+}
+
+const toggleInspector = (inspector, toolbar, isVisible) => {
+  inspector.container.style.display = isVisible ? 'block' : 'none'
+  toolbar.container.style.display = isVisible ? 'block' : 'none'
+}
+
+export default {
+  keyRegister,
+  dragMouse,
+  getMousePos,
+  cycleAction,
+  setPalletteColors,
+  toggleInspector
+}

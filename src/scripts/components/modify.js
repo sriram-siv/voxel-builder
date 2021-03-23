@@ -43,7 +43,7 @@ export const stretch = (object, face) => {
   return stretched
 }
 
-export const duplicate = (object, face) => {
+export const duplicate = (object, { face, color }) => {
   const { position } = object
   const { param, axis, shift } = getFaceParams(face)
   const dimensions = getDimensions(object)
@@ -54,6 +54,12 @@ export const duplicate = (object, face) => {
     dimensions: [width, height, depth],
     position: { ...position, [axis]: position[axis] + (shift * scale) }
   })
+
+  if (!object.isGround) {
+    duplicated.material = object.material.map(mat => mat.clone())
+    // Prevent copy of hover color
+    duplicated.material[face].color.setRGB(color.r, color.g, color.b)
+  }
 
   return duplicated
 }
